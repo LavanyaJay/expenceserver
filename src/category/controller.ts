@@ -1,22 +1,16 @@
-import { JsonController, Body, Param, Post, Get } from "routing-controllers";
+import { JsonController, Body, Post, Get } from "routing-controllers";
 import Category from "../category/entity";
-import Type from "../type/entity";
 
 @JsonController()
 export default class CategoryController {
-  @Post("/type/:id/category")
-  async createCategory(
-    @Param("id") typeId: number,
-    @Body() category: Category
-  ) {
-    const type = await Type.findOne(typeId);
-    const entity = await Category.create({ ...category, type });
+  @Post("/category")
+  async createCategory(@Body() category: Category) {
+    const entity = await Category.create({ ...category });
     return entity.save();
   }
-  @Get("/type/:id/category")
-  async allCategory(@Param("id") typeId: number) {
-    const type = await Type.findOne(typeId);
-    const category = await Category.find({ where: { type } });
+  @Get("/category")
+  async allCategory() {
+    const category = await Category.find();
     return { category: category };
   }
 }
